@@ -3,10 +3,12 @@ extends EditorPlugin
 
 var listener := TCPServer.new()
 var client: StreamPeerTCP
-var thread: Thread
+var thread: Threa
+
+const GODOT_PORT = 55431
 
 func _enter_tree():
-	if listener.listen(55431) != OK:
+	if listener.listen(GODOT_PORT) != OK:
 		push_error("Failed to start TCP listener")
 		return
 	thread = Thread.new()
