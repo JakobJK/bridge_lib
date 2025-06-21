@@ -60,22 +60,14 @@ def send_payload_to_godot(payload: dict):
         s.connect((GODOT_HOST, GODOT_PORT))
         s.sendall(data.encode("utf-8"))
 
-def get_node_type(node: Optional[str]) -> Optional[str]:
-    """
-    Returns type type of the node.
-    Args:
-        node (str): The name of the node.
-
-    Returns:
-        str: The determined node type.
-    """
+def get_node_type(node: Optional[str]):
     if cmds.nodeType(node) == 'transform':
         if children := cmds.listRelatives(node, children=True, shapes=True, fullPath=True):
             return cmds.nodeType(children[0])
     return cmds.nodeType(node)
 
-def get_material_color_from_mesh(node):
-    shapes = cmds.listRelatives(node, shapes=True, fullPath=True) or []
+def get_material_color_from_mesh(node_name: str):
+    shapes = cmds.listRelatives(node_name, shapes=True, fullPath=True) or []
     for shape in shapes:
         sg_nodes = cmds.listConnections(shape, type='shadingEngine') or []
         for sg in sg_nodes:
@@ -95,12 +87,11 @@ def build_mesh_payload():
     
     node = selection[0]
     short_name = node.split('|')[-1]
-    mesh_data = get_mesh_data_from_name(node)
 
     payload = {
         "name": short_name,
         "type": "mesh",
-        "mesh_data": mesh_data,
+        "mesh_data": get_mesh_data_from_name(node),
         "material_color": get_material_color_from_mesh(node)
     }
     return payload
