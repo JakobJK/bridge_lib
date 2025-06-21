@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.spec
+.mypy_cache/
+.pytest_cache/
+.vscode/
+.idea/
+*.log
